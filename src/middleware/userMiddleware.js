@@ -4,10 +4,10 @@ const redisClient = require("../config/redis");
 const userMiddleware = async (req, res, next) => {
     try {
         // console.log("Cookies:", req.cookies);
-         const token =   req.cookies?.token ||
-      req.body?.token ||
-      req.headers?.authorization?.replace("Bearer ", "") ||
-      null;
+        const token = req.cookies?.token ||
+            req.body?.token ||
+            req.headers?.authorization?.replace("Bearer ", "") ||
+            null;
         // console.log("Token:", token);           
         if (!token) {
             throw new Error("Token is not present");
