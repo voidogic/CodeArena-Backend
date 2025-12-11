@@ -15,7 +15,10 @@ app.use(cors({
     origin: ['http://localhost:5173', 'https://code-arena-frontend-bay.vercel.app'],
     // origin: ['https://code-arena-frontend-bay.vercel.app'],
     // origin: ['http://localhost:5173'],
-    credentials: true
+    credentials: true,
+
+    // allowedHeaders: ["Content-Type", "Authorization"],
+    // methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
 }));
 
 
