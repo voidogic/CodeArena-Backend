@@ -13,39 +13,34 @@ const videoRouter = require('./src/routes/videoCreator');
 
 app.use(cors({
     origin: ['http://localhost:5173', 'https://code-arena-frontend-bay.vercel.app'],
-    // origin: ['https://code-arena-frontend-bay.vercel.app'],
-    // origin: ['http://localhost:5173'],
-    credentials: true,
-
-    allowedHeaders: ["Content-Type", "Authorization"],
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
+    credentials: true
 }));
 
 
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/user',authRouter)
-app.use('/problem',problemRouter)
-app.use('/submission',submitRouter)
+app.use('/user', authRouter)
+app.use('/problem', problemRouter)
+app.use('/submission', submitRouter)
 app.use('/ai', aiRouter);
 app.use('/video', videoRouter);
 
 
 
-const InitalizeConnection = async ()=>{
-    try{     
+const InitalizeConnection = async () => {
+    try {
 
-        await Promise.all([main(),redisClient.connect()]);
+        await Promise.all([main(), redisClient.connect()]);
         console.log("DB and RedisDB Connected");
-        
-        app.listen(process.env.PORT, ()=>{
-            console.log("Server listening at port number: "+ process.env.PORT);
+
+        app.listen(process.env.PORT, () => {
+            console.log("Server listening at port number: " + process.env.PORT);
         })
 
     }
-    catch(err){
-        console.log("Error: "+err);
+    catch (err) {
+        console.log("Error: " + err);
     }
 }
 
