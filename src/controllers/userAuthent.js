@@ -23,7 +23,7 @@ const register = async (req, res) => {
             httpOnly: true,
             secure: true,
             sameSite: 'none',
-            domain: '.vercel.app',
+            // domain: '.vercel.app',
         })
         const reply = {
             firstName: user.firstName,
@@ -72,9 +72,9 @@ const login = async (req, res) => {
             maxAge: 60 * 60 * 1000,
             httpOnly: true,
             secure: true,
-            sameSite: 'none',
+            sameSite: 'none'
             // domain: '.vercel.app',
-            maxAge: 60 * 60 * 1000
+            
         })
         res.status(201).json({
             user: reply,
@@ -121,8 +121,8 @@ const adminRegister = async (req, res) => {
             maxAge: 60 * 60 * 1000,
             httpOnly: true,
             secure: true,
-            sameSite: 'none',
-            domain: '.vercel.app',
+            sameSite: 'none'
+            // domain: '.vercel.app',
         })
         res.status(201).send("User Registered Successfully");
     }
