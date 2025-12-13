@@ -5,9 +5,50 @@ const User = require('../models/user');
 const Submission = require('../models/submission');
 const SolutionVideo = require('../models/solutionVideo');
 
+
+const encodeBase64 = (str = "") =>
+  Buffer.from(String(str), "utf-8").toString("base64");
+
+
 const createProblem = async (req, res) => {
+
+    console.log("ADMIN REQ RESULT:", req.result);
+
+
     const { title, description, difficulty, tags, visibleTestCases, hiddenTestCases, startCode, referenceSolution, problemCreator } = req.body;
     try {
+
+        if (!Array.isArray(referenceSolution)) {
+            return res.status(400).json({
+                message: "referenceSolution must be an array"
+            });
+        }
+
+        if (!Array.isArray(visibleTestCases)) {
+            return res.status(400).json({
+                message: "visibleTestCases must be an array"
+            });
+        }
+
+        if (referenceSolution.length === 0) {
+            return res.status(400).json({
+                message: "referenceSolution cannot be empty"
+            });
+        }
+
+        if (visibleTestCases.length === 0) {
+            return res.status(400).json({
+                message: "visibleTestCases cannot be empty"
+            });
+        }
+
+        console.log("REQ BODY KEYS:", Object.keys(req.body));
+        console.log("referenceSolution:", referenceSolution);
+        console.log("visibleTestCases:", visibleTestCases);
+
+
+
+
         for (const { language, completeCode } of referenceSolution) {
 
 
@@ -16,7 +57,7 @@ const createProblem = async (req, res) => {
                 source_code: completeCode,
                 language_id: languageId,
                 stdin: testcase.input,
-                expected_output: testcase.output
+                expected_output: testcase.output,
             }));
 
             const submitResult = await submitBatch(submissions);
@@ -47,6 +88,8 @@ const createProblem = async (req, res) => {
 }
 
 const updateProblem = async (req, res) => {
+
+
     const { id } = req.params;
     const { title, description, difficulty, tags, visibleTestCases, hiddenTestCases, startCode, referenceSolution, problemCreator } = req.body;
 
@@ -68,8 +111,9 @@ const updateProblem = async (req, res) => {
             const submissions = visibleTestCases.map((testcase) => ({
                 source_code: completeCode,
                 language_id: languageId,
-                stdin: testcase.input,
-                expected_output: testcase.output
+                stdin: encodeBase64(testcase.input),
+                expected_output: encodeBase64(testcase.output),
+                base64_encoded: true
             }));
 
             const submitResult = await submitBatch(submissions);
@@ -83,7 +127,7 @@ const updateProblem = async (req, res) => {
             }
         }
 
-        const newProblem = await Problem.findByIdAndUpdate(id, { ...req.body }, { runValidators0: true, new: true });
+        const newProblem = await Problem.findByIdAndUpdate(id, { ...req.body }, { runValidators: true, new: true });
         res.status(200).send(newProblem);
 
     } catch (error) {
@@ -139,7 +183,7 @@ const getProblemById = async (req, res) => {
                 secureUrl: videos.secureUrl,
                 thumbnailUrl: videos.thumbnailUrl,
                 duration: videos.duration
-            }   
+            }
             return res.status(200).send(responseData);
         }
 

@@ -37,7 +37,7 @@ const register = async (req, res) => {
             token
         })
     } catch (error) {
-        console.log("error",error)
+        console.log("error", error)
         res.status(400).json({ message: error.message });
         // console.log("asdf")
     }
@@ -74,7 +74,7 @@ const login = async (req, res) => {
             secure: true,
             sameSite: 'none'
             // domain: '.vercel.app',
-            
+
         })
         res.status(201).json({
             user: reply,
@@ -120,6 +120,12 @@ const adminRegister = async (req, res) => {
         res.cookie('token', token, {
             maxAge: 60 * 60 * 1000,
             httpOnly: true,
+
+            // Localhost uses http:// → cookies require:
+            //     secure: false, sameSite: "lax"
+            // Production uses https:// → cookies require:
+            //     secure: true, sameSite: "none"
+            
             secure: true,
             sameSite: 'none'
             // domain: '.vercel.app',
