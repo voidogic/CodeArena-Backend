@@ -126,7 +126,7 @@ const submitBatch = async (submissions) => {
       }
     );
 
-    return response.data; // 🔥 MUST RETURN
+    return response.data; // MUST RETURN
   } catch (error) {
     console.error(
       "submitBatch error:",
