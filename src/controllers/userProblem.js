@@ -42,9 +42,9 @@ const createProblem = async (req, res) => {
             });
         }
 
-        console.log("REQ BODY KEYS:", Object.keys(req.body));
-        console.log("referenceSolution:", referenceSolution);
-        console.log("visibleTestCases:", visibleTestCases);
+        // console.log("REQ BODY KEYS:", Object.keys(req.body));
+        // console.log("referenceSolution:", referenceSolution);
+        // console.log("visibleTestCases:", visibleTestCases);
 
 
 
@@ -54,10 +54,11 @@ const createProblem = async (req, res) => {
 
             const languageId = getLanguageById(language);
             const submissions = visibleTestCases.map((testcase) => ({
-                source_code: completeCode,
+                source_code: encodeBase64(completeCode),
                 language_id: languageId,
-                stdin: testcase.input,
-                expected_output: testcase.output,
+                stdin: encodeBase64(testcase.input),
+                expected_output: encodeBase64(testcase.output),
+                base64_encoded: true
             }));
 
             const submitResult = await submitBatch(submissions);
